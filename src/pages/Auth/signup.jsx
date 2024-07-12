@@ -1,6 +1,9 @@
 import React from 'react'
 import Img1 from "./../../assets/images/auth/auth/auth-img.png"
 import Img2 from "./../../assets/images/auth/logo.png"
+import EmailIcon from '@mui/icons-material/Email';
+import HttpsIcon from '@mui/icons-material/Https';
+import PersonIcon from '@mui/icons-material/Person';
 
 
 const signup = () => {
@@ -24,13 +27,14 @@ const signup = () => {
                         <form action="#">
                             <div class="icon-field mb-16">
                                 <span class="icon top-50 translate-middle-y">
-                                    <iconify-icon icon="f7:person"></iconify-icon>
+                                    <PersonIcon />
+
                                 </span>
                                 <input type="text" class="form-control h-56-px bg-neutral-50 radius-12" placeholder="Username" />
                             </div>
                             <div class="icon-field mb-16">
                                 <span class="icon top-50 translate-middle-y">
-                                    <iconify-icon icon="mage:email"></iconify-icon>
+                                    <EmailIcon />
                                 </span>
                                 <input type="email" class="form-control h-56-px bg-neutral-50 radius-12" placeholder="Email" />
                             </div>
@@ -38,7 +42,7 @@ const signup = () => {
                                 <div class="position-relative ">
                                     <div class="icon-field">
                                         <span class="icon top-50 translate-middle-y">
-                                            <iconify-icon icon="solar:lock-password-outline"></iconify-icon>
+                                            <HttpsIcon />
                                         </span>
                                         <input type="password" class="form-control h-56-px bg-neutral-50 radius-12" id="your-password" placeholder="Password" />
                                     </div>
