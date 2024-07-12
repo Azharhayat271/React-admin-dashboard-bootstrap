@@ -2,6 +2,16 @@ import React, { useEffect, useState } from 'react'
 import Logo from "./../assets/images/logo.png";
 import LogoIcon from "./../assets/images/logo-icon.png";
 import { Link } from 'react-router-dom';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
+import DynamicFormIcon from '@mui/icons-material/DynamicForm';
+import ErrorIcon from '@mui/icons-material/Error';
+import LoginIcon from '@mui/icons-material/Login';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import SettingsIcon from '@mui/icons-material/Settings';
+import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
+
 
 
 
@@ -36,7 +46,7 @@ const sidebar = ({ isMobileActive }) => {
                         <li>
                             <Link to="/newDashboardDesign">
                                 <a>
-                                    <iconify-icon icon="solar:home-smile-angle-outline" class="menu-icon"></iconify-icon>
+                                    <DashboardCustomizeIcon className="me-3" />
                                     <span>New Dashboard</span>
                                 </a></Link>
                         </li>
@@ -45,7 +55,7 @@ const sidebar = ({ isMobileActive }) => {
                         <Link to="/table">
                             <li>
                                 <a>
-                                    <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
+                                    <PeopleAltIcon className='me-3'></PeopleAltIcon>
                                     <span>Users Table</span>
                                 </a>
                             </li>
@@ -53,7 +63,8 @@ const sidebar = ({ isMobileActive }) => {
                         <Link to="/grid">
                             <li>
                                 <a>
-                                    <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
+                                    <PeopleOutlineIcon className='me-3'></PeopleOutlineIcon>
+
                                     <span>Users Grid</span>
                                 </a>
                             </li>
@@ -61,7 +72,8 @@ const sidebar = ({ isMobileActive }) => {
                         <Link to="/formLayout">
                             <li>
                                 <a>
-                                    <iconify-icon icon="hugeicons:invoice-03" class="menu-icon"></iconify-icon>
+                                    <DynamicFormIcon className='me-3'></DynamicFormIcon>
+
                                     <span>Users forms</span>
                                 </a>
                             </li>
@@ -69,7 +81,8 @@ const sidebar = ({ isMobileActive }) => {
                         <Link to="/formValidations">
                             <li>
                                 <a>
-                                    <iconify-icon icon="material-symbols:map-outline" class="menu-icon"></iconify-icon>
+                                    <ErrorIcon className='me-3'></ErrorIcon>
+
                                     <span>Validation forms</span>
                                 </a>
                             </li>
@@ -77,7 +90,7 @@ const sidebar = ({ isMobileActive }) => {
                         <Link to="/calender">
                             <li>
                                 <a>
-                                    <iconify-icon icon="solar:calendar-outline" class="menu-icon"></iconify-icon>
+                                    <CalendarMonthIcon className='me-3'></CalendarMonthIcon>
                                     <span>Calender</span>
                                 </a>
                             </li>
@@ -94,7 +107,8 @@ const sidebar = ({ isMobileActive }) => {
                         <Link to="/login">
                             <li>
                                 <a>
-                                    <iconify-icon icon="material-symbols:map-outline" class="menu-icon"></iconify-icon>
+                                    <LoginIcon className='me-3'></LoginIcon>
+
                                     <span>Login Page</span>
                                 </a>
                             </li>
@@ -102,7 +116,7 @@ const sidebar = ({ isMobileActive }) => {
                         <Link to="/register">
                             <li>
                                 <a>
-                                    <iconify-icon icon="solar:calendar-outline" class="menu-icon"></iconify-icon>
+                                    <HowToRegIcon className='me-3'></HowToRegIcon>
                                     <span>Register Page</span>
                                 </a>
                             </li>
@@ -112,7 +126,7 @@ const sidebar = ({ isMobileActive }) => {
                         <Link to="/settings">
                             <li>
                                 <a>
-                                    <iconify-icon icon="material-symbols:map-outline" class="menu-icon"></iconify-icon>
+                                    <SettingsIcon className='me-3'></SettingsIcon>
                                     <span>General Settings</span>
                                 </a>
                             </li>
