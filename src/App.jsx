@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
+import Loader from "./pages/splash/loader"
 import Weclome from "./pages/dashboard/index";
 import DashboardDesign from './pages/dashboard/newDashboardDesign';
 import Login from "./pages/Auth/login";
@@ -13,15 +14,18 @@ import Grid from "./components/dataviews/grid";
 import Calender from './components/calender/calender';
 import ViewProfile from './components/profile/view';
 import Layout from './layout/layout';
+import LocalStorageWatcher from './utils/tokenValidator/authwatcher';
+
+
 
 function App() {
-  const [count, setCount] = useState(0);
 
   return (
     <>
       <Router>
+        <LocalStorageWatcher />
         <Routes>
-          <Route path="/" element={<Layout><Weclome /></Layout>} />
+          <Route path="/" element={<Loader />} />
           <Route path="/newDashboardDesign" element={<Layout><DashboardDesign /></Layout>} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

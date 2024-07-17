@@ -1,78 +1,136 @@
-import React from 'react'
-import Img1 from "./../../assets/images/auth/auth/auth-img.png"
-import Img2 from "./../../assets/images/auth/logo.png"
+import React, { useState } from 'react';
+import Img1 from "./../../assets/images/auth/auth/auth-img.png";
+import Img2 from "./../../assets/images/auth/logo.png";
 import EmailIcon from '@mui/icons-material/Email';
 import HttpsIcon from '@mui/icons-material/Https';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import { LoginAPI } from './../../API/login';
+import { useNavigate } from 'react-router-dom';
 
+const Login = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [rememberMe, setRememberMe] = useState(false);
+    const [error, setError] = useState(null);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const navigate = useNavigate();
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const response = await LoginAPI({ email, password });
+        if (response.error) {
+            setError(response.error);
+            setOpenSnackbar(true);
+        } else {
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('rememberMe', rememberMe);
+            navigate('/dashboard');
+        }
+    };
 
-const login = () => {
+    const handlePasswordToggle = () => {
+        setShowPassword(!showPassword);
+    };
+
+    const handleSnackbarClose = () => {
+        setOpenSnackbar(false);
+    };
+
     return (
-        <div> <section class="auth bg-base d-flex flex-wrap">
-            <div class="auth-left d-lg-block d-none">
-                <div class="d-flex align-items-center flex-column h-100 justify-content-center">
-                    <img src={Img1} alt="" />
-                </div>
-            </div>
-            <div class="auth-right py-32 px-24 d-flex flex-column justify-content-center">
-                <div class="max-w-464-px mx-auto w-100">
-                    <div>
-                        <a href="index.html" class="mb-40 max-w-290-px">
-                            <img src={Img2} alt="" />
-                        </a>
-                        <h4 class="mb-12">Sign In to your Account</h4>
-                        <p class="mb-32 text-secondary-light text-lg">Welcome back! please enter your detail</p>
+        <div>
+            <section className="auth bg-base d-flex flex-wrap">
+                <div className="auth-left d-lg-block d-none">
+                    <div className="d-flex align-items-center flex-column h-100 justify-content-center">
+                        <img src={Img1} alt="" />
                     </div>
-                    <form action="#">
-                        <div class="icon-field mb-16">
-                            <span class="icon top-50 translate-middle-y">
-                                <EmailIcon />
-                            </span>
-                            <input type="email" class="form-control h-56-px bg-neutral-50 radius-12" placeholder="Email" />
-                        </div>
-                        <div class="position-relative mb-20">
-                            <div class="icon-field">
-                                <span class="icon top-50 translate-middle-y">
-                                    <HttpsIcon />
-                                </span>
-                                <input type="password" class="form-control h-56-px bg-neutral-50 radius-12" id="your-password" placeholder="Password" />
-                            </div>
-                            <span class="toggle-password ri-eye-line cursor-pointer position-absolute end-0 top-50 translate-middle-y me-16 text-secondary-light" data-toggle="#your-password"></span>
-                        </div>
-                        <div class="">
-                            <div class="d-flex justify-content-between gap-2">
-                                <div class="form-check style-check d-flex align-items-center">
-                                    <input class="form-check-input border border-neutral-300" type="checkbox" value="" id="remeber" />
-                                    <label class="form-check-label" for="remeber">Remember me </label>
-                                </div>
-                                <a href="javascript:void(0)" class="text-primary-600 fw-medium">Forgot Password?</a>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary text-sm btn-sm px-12 py-16 w-100 radius-12 mt-32"> Sign In</button>
-
-                        <div class="mt-32 center-border-horizontal text-center">
-                            <span class="bg-base z-1 px-4">Or sign in with</span>
-                        </div>
-                        <div class="mt-32 d-flex align-items-center gap-3">
-                            <button type="button" class="fw-semibold text-primary-light py-16 px-24 w-50 border radius-12 text-md d-flex align-items-center justify-content-center gap-12 line-height-1 bg-hover-primary-50">
-                                <iconify-icon icon="ic:baseline-facebook" class="text-primary-600 text-xl line-height-1"></iconify-icon>
-                                Google
-                            </button>
-                            <button type="button" class="fw-semibold text-primary-light py-16 px-24 w-50 border radius-12 text-md d-flex align-items-center justify-content-center gap-12 line-height-1 bg-hover-primary-50">
-                                <iconify-icon icon="logos:google-icon" class="text-primary-600 text-xl line-height-1"></iconify-icon>
-                                Google
-                            </button>
-                        </div>
-                        <div class="mt-32 text-center text-sm">
-                            <p class="mb-0">Don’t have an account? <a href="sign-up.html" class="text-primary-600 fw-semibold">Sign Up</a></p>
-                        </div>
-
-                    </form>
                 </div>
-            </div>
-        </section></div>
-    )
-}
+                <div className="auth-right py-32 px-24 d-flex flex-column justify-content-center">
+                    <div className="max-w-464-px mx-auto w-100">
+                        <div>
+                            <a href="index.html" className="mb-40 max-w-290-px">
+                                <img src={Img2} alt="" />
+                            </a>
+                            <h4 className="mb-12">Sign In to your Account</h4>
+                            <p className="mb-32 text-secondary-light text-lg">Welcome back! please enter your detail</p>
+                        </div>
+                        <form onSubmit={handleSubmit}>
+                            <div className="icon-field mb-16">
+                                <span className="icon top-50 translate-middle-y">
+                                    <EmailIcon />
+                                </span>
+                                <input
+                                    type="email"
+                                    className="form-control h-56-px bg-neutral-50 radius-12"
+                                    placeholder="Email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="position-relative mb-20">
+                                <div className="icon-field">
+                                    <span className="icon top-50 translate-middle-y">
+                                        <HttpsIcon />
+                                    </span>
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        className="form-control h-56-px bg-neutral-50 radius-12"
+                                        id="your-password"
+                                        placeholder="Password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                    />
+                                    <span className="toggle-password position-absolute end-0 top-50 translate-middle-y me-16 cursor-pointer" onClick={handlePasswordToggle}>
+                                        {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="d-flex justify-content-between gap-2">
+                                <div className="form-check style-check d-flex align-items-center">
+                                    <input
+                                        className="form-check-input border border-neutral-300"
+                                        type="checkbox"
+                                        id="remember"
+                                        checked={rememberMe}
+                                        onChange={() => setRememberMe(!rememberMe)}
+                                    />
+                                    <label className="form-check-label" htmlFor="remember">Remember me</label>
+                                </div>
+                                <a href="javascript:void(0)" className="text-primary-600 fw-medium">Forgot Password?</a>
+                            </div>
+                            <button type="submit" className="btn btn-primary text-sm btn-sm px-12 py-16 w-100 radius-12 mt-32">Sign In</button>
+                            <div className="mt-32 center-border-horizontal text-center">
+                                <span className="bg-base z-1 px-4">Or sign in with</span>
+                            </div>
+                            <div className="mt-32 d-flex align-items-center gap-3">
+                                <button type="button" className="fw-semibold text-primary-light py-16 px-24 w-50 border radius-12 text-md d-flex align-items-center justify-content-center gap-12 line-height-1 bg-hover-primary-50">
+                                    <iconify-icon icon="ic:baseline-facebook" className="text-primary-600 text-xl line-height-1"></iconify-icon>
+                                    Google
+                                </button>
+                                <button type="button" className="fw-semibold text-primary-light py-16 px-24 w-50 border radius-12 text-md d-flex align-items-center justify-content-center gap-12 line-height-1 bg-hover-primary-50">
+                                    <iconify-icon icon="logos:google-icon" className="text-primary-600 text-xl line-height-1"></iconify-icon>
+                                    Google
+                                </button>
+                            </div>
+                            <div className="mt-32 text-center text-sm">
+                                <p className="mb-0">Don’t have an account? <a href="sign-up.html" className="text-primary-600 fw-semibold">Sign Up</a></p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+            <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleSnackbarClose}>
+                <Alert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%' }}>
+                    {error}
+                </Alert>
+            </Snackbar>
+        </div>
+    );
+};
 
-export default login
+export default Login;
