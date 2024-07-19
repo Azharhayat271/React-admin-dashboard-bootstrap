@@ -5,6 +5,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import HttpsIcon from '@mui/icons-material/Https';
 import PersonIcon from '@mui/icons-material/Person';
 import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import { LoginAPI } from '../../API/auth/register';
 import { toast } from 'react-toastify';
 
@@ -98,6 +99,19 @@ const Signup = () => {
                             </div>
                             <div className="icon-field mb-16">
                                 <span className="icon top-50 translate-middle-y">
+                                    <PersonIcon />
+                                </span>
+                                <input
+                                    type="text"
+                                    className="form-control h-56-px bg-neutral-50 radius-12"
+                                    placeholder="Gender"
+                                    name="gender"
+                                    value={formData.gender}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="icon-field mb-16">
+                                <span className="icon top-50 translate-middle-y">
                                     <EmailIcon />
                                 </span>
                                 <input
@@ -148,17 +162,23 @@ const Signup = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div className="mb-20">
-                                <Checkbox
-                                    checked={agree}
-                                    onChange={handleCheckboxChange}
-                                    inputProps={{ 'aria-label': 'Agree to terms and conditions' }}
+                            <div className="mb-20 d-flex align-items-center">
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={agree}
+                                            onChange={handleCheckboxChange}
+                                            inputProps={{ 'aria-label': 'Agree to terms and conditions' }}
+                                        />
+                                    }
+                                    label={
+                                        <span className="text-sm">
+                                            By creating an account means you agree to the
+                                            <a href="javascript:void(0)" className="text-primary-600 fw-semibold"> Terms & Conditions</a> and our
+                                            <a href="javascript:void(0)" className="text-primary-600 fw-semibold"> Privacy Policy</a>
+                                        </span>
+                                    }
                                 />
-                                <label className="form-check-label text-sm" htmlFor="condition">
-                                    By creating an account means you agree to the
-                                    <a href="javascript:void(0)" className="text-primary-600 fw-semibold"> Terms & Conditions</a> and our
-                                    <a href="javascript:void(0)" className="text-primary-600 fw-semibold"> Privacy Policy</a>
-                                </label>
                             </div>
                             <button type="submit" className="btn btn-primary text-sm btn-sm px-12 py-16 w-100 radius-12 mt-32">
                                 Sign Up
