@@ -1,5 +1,5 @@
 // apiUtils.js
-import axios from './../utils/axios/axiosInstance';
+import axios from '../../utils/axios/axiosInstance';
 
 export const LoginAPI = async ({ email, password }) => {
     let resolved = {

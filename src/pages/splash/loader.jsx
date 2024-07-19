@@ -10,8 +10,10 @@ const SplashScreen = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             const token = localStorage.getItem('token');
-            if (token) {
-                navigate('/dashboard');
+            const rememberMe = localStorage.getItem('rememberMe') === 'true';
+
+            if (token && rememberMe) {
+                navigate('/newDashboardDesign');
             } else {
                 navigate('/login');
             }

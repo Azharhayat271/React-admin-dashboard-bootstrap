@@ -7,8 +7,12 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import { LoginAPI } from './../../API/login';
-import { useNavigate } from 'react-router-dom';
+import { LoginAPI } from '../../API/auth/login';
+import { Link, useNavigate } from 'react-router-dom';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+
+
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -28,7 +32,7 @@ const Login = () => {
         } else {
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('rememberMe', rememberMe);
-            navigate('/dashboard');
+            navigate('/newDashboardDesign');
         }
     };
 
@@ -92,19 +96,22 @@ const Login = () => {
                             </div>
                             <div className="d-flex justify-content-between gap-2">
                                 <div className="form-check style-check d-flex align-items-center">
-                                    <input
-                                        className="form-check-input border border-neutral-300"
-                                        type="checkbox"
-                                        id="remember"
-                                        checked={rememberMe}
-                                        onChange={() => setRememberMe(!rememberMe)}
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={rememberMe}
+                                                onChange={() => setRememberMe(!rememberMe)}
+                                                name="remember"
+                                                color="primary"
+                                            />
+                                        }
+                                        label="Remember me"
                                     />
-                                    <label className="form-check-label" htmlFor="remember">Remember me</label>
                                 </div>
-                                <a href="javascript:void(0)" className="text-primary-600 fw-medium">Forgot Password?</a>
+                                <a className="text-primary-600 fw-medium">Forgot Password?</a>
                             </div>
                             <button type="submit" className="btn btn-primary text-sm btn-sm px-12 py-16 w-100 radius-12 mt-32">Sign In</button>
-                            <div className="mt-32 center-border-horizontal text-center">
+                            {/* <div className="mt-32 center-border-horizontal text-center">
                                 <span className="bg-base z-1 px-4">Or sign in with</span>
                             </div>
                             <div className="mt-32 d-flex align-items-center gap-3">
@@ -116,9 +123,9 @@ const Login = () => {
                                     <iconify-icon icon="logos:google-icon" className="text-primary-600 text-xl line-height-1"></iconify-icon>
                                     Google
                                 </button>
-                            </div>
+                            </div> */}
                             <div className="mt-32 text-center text-sm">
-                                <p className="mb-0">Don’t have an account? <a href="sign-up.html" className="text-primary-600 fw-semibold">Sign Up</a></p>
+                                <p className="mb-0">Don’t have an account? <Link to="/register" className="text-primary-600 fw-semibold">Sign Up</Link></p>
                             </div>
                         </form>
                     </div>

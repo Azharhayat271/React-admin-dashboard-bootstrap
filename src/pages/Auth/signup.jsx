@@ -1,94 +1,196 @@
-import React from 'react'
-import Img1 from "./../../assets/images/auth/auth/auth-img.png"
-import Img2 from "./../../assets/images/auth/logo.png"
+import React, { useState } from 'react';
+import Img1 from './../../assets/images/auth/auth/auth-img.png';
+import Img2 from './../../assets/images/auth/logo.png';
 import EmailIcon from '@mui/icons-material/Email';
 import HttpsIcon from '@mui/icons-material/Https';
 import PersonIcon from '@mui/icons-material/Person';
+import Checkbox from '@mui/material/Checkbox';
+import { LoginAPI } from '../../API/auth/register';
+import { toast } from 'react-toastify';
 
+const Signup = () => {
+    const [formData, setFormData] = useState({
+        name: '',
+        username: '',
+        gender: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        phoneNo: '',
+    });
 
-const signup = () => {
+    const [agree, setAgree] = useState(false);
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleCheckboxChange = (e) => {
+        setAgree(e.target.checked);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (formData.password !== formData.confirmPassword) {
+            toast.error('Passwords do not match');
+            return;
+        }
+
+        if (!agree) {
+            toast.error('You must agree to the terms and conditions');
+            return;
+        }
+
+        const { name, username, gender, email, password, phoneNo } = formData;
+        const result = await LoginAPI({ name, username, gender, email, password, phoneNo });
+
+        if (result.error) {
+            toast.error(result.error);
+        } else {
+            toast.success('Registration successful!');
+        }
+    };
+
     return (
         <div>
-            <section class="auth bg-base d-flex flex-wrap">
-                <div class="auth-left d-lg-block d-none">
-                    <div class="d-flex align-items-center flex-column h-100 justify-content-center">
+            <section className="auth bg-base d-flex flex-wrap">
+                <div className="auth-left d-lg-block d-none">
+                    <div className="d-flex align-items-center flex-column h-100 justify-content-center">
                         <img src={Img1} alt="" />
                     </div>
                 </div>
-                <div class="auth-right py-32 px-24 d-flex flex-column justify-content-center">
-                    <div class="max-w-464-px mx-auto w-100">
+                <div className="auth-right py-32 px-24 d-flex flex-column justify-content-center">
+                    <div className="max-w-464-px mx-auto w-100">
                         <div>
-                            <a href="index.html" class="mb-40 max-w-290-px">
+                            <a href="index.html" className="mb-40 max-w-290-px">
                                 <img src={Img2} alt="" />
                             </a>
-                            <h4 class="mb-12">Sign Up to your Account</h4>
-                            <p class="mb-32 text-secondary-light text-lg">Welcome back! please enter your detail</p>
+                            <h4 className="mb-12">Sign Up to your Account</h4>
+                            <p className="mb-32 text-secondary-light text-lg">Welcome back! please enter your detail</p>
                         </div>
-                        <form action="#">
-                            <div class="icon-field mb-16">
-                                <span class="icon top-50 translate-middle-y">
+                        <form onSubmit={handleSubmit}>
+                            <div className="icon-field mb-16">
+                                <span className="icon top-50 translate-middle-y">
                                     <PersonIcon />
-
                                 </span>
-                                <input type="text" class="form-control h-56-px bg-neutral-50 radius-12" placeholder="Username" />
+                                <input
+                                    type="text"
+                                    className="form-control h-56-px bg-neutral-50 radius-12"
+                                    placeholder="Name"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                />
                             </div>
-                            <div class="icon-field mb-16">
-                                <span class="icon top-50 translate-middle-y">
+                            <div className="icon-field mb-16">
+                                <span className="icon top-50 translate-middle-y">
+                                    <PersonIcon />
+                                </span>
+                                <input
+                                    type="text"
+                                    className="form-control h-56-px bg-neutral-50 radius-12"
+                                    placeholder="Username"
+                                    name="username"
+                                    value={formData.username}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="icon-field mb-16">
+                                <span className="icon top-50 translate-middle-y">
                                     <EmailIcon />
                                 </span>
-                                <input type="email" class="form-control h-56-px bg-neutral-50 radius-12" placeholder="Email" />
+                                <input
+                                    type="email"
+                                    className="form-control h-56-px bg-neutral-50 radius-12"
+                                    placeholder="Email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                />
                             </div>
-                            <div class="mb-20">
-                                <div class="position-relative ">
-                                    <div class="icon-field">
-                                        <span class="icon top-50 translate-middle-y">
-                                            <HttpsIcon />
-                                        </span>
-                                        <input type="password" class="form-control h-56-px bg-neutral-50 radius-12" id="your-password" placeholder="Password" />
-                                    </div>
-                                    <span class="toggle-password ri-eye-line cursor-pointer position-absolute end-0 top-50 translate-middle-y me-16 text-secondary-light" data-toggle="#your-password"></span>
-                                </div>
-                                <span class="mt-12 text-sm text-secondary-light">Your password must have at least 8 characters</span>
+                            <div className="icon-field mb-16">
+                                <span className="icon top-50 translate-middle-y">
+                                    <HttpsIcon />
+                                </span>
+                                <input
+                                    type="password"
+                                    className="form-control h-56-px bg-neutral-50 radius-12"
+                                    placeholder="Password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                />
                             </div>
-                            <div class="">
-                                <div class="d-flex justify-content-between gap-2">
-                                    <div class="form-check style-check d-flex align-items-start">
-                                        <input class="form-check-input border border-neutral-300 mt-4" type="checkbox" value="" id="condition" />
-                                        <label class="form-check-label text-sm" for="condition">
-                                            By creating an account means you agree to the
-                                            <a href="javascript:void(0)" class="text-primary-600 fw-semibold">Terms & Conditions</a> and our
-                                            <a href="javascript:void(0)" class="text-primary-600 fw-semibold">Privacy Policy</a>
-                                        </label>
-                                    </div>
-
-                                </div>
+                            <div className="icon-field mb-16">
+                                <span className="icon top-50 translate-middle-y">
+                                    <HttpsIcon />
+                                </span>
+                                <input
+                                    type="password"
+                                    className="form-control h-56-px bg-neutral-50 radius-12"
+                                    placeholder="Confirm Password"
+                                    name="confirmPassword"
+                                    value={formData.confirmPassword}
+                                    onChange={handleChange}
+                                />
                             </div>
-
-                            <button type="submit" class="btn btn-primary text-sm btn-sm px-12 py-16 w-100 radius-12 mt-32"> Sign Up</button>
-
-                            <div class="mt-32 center-border-horizontal text-center">
-                                <span class="bg-base z-1 px-4">Or sign up with</span>
+                            <div className="icon-field mb-16">
+                                <span className="icon top-50 translate-middle-y">
+                                    <PersonIcon />
+                                </span>
+                                <input
+                                    type="text"
+                                    className="form-control h-56-px bg-neutral-50 radius-12"
+                                    placeholder="Phone Number"
+                                    name="phoneNo"
+                                    value={formData.phoneNo}
+                                    onChange={handleChange}
+                                />
                             </div>
-                            <div class="mt-32 d-flex align-items-center gap-3">
-                                <button type="button" class="fw-semibold text-primary-light py-16 px-24 w-50 border radius-12 text-md d-flex align-items-center justify-content-center gap-12 line-height-1 bg-hover-primary-50">
-                                    <iconify-icon icon="ic:baseline-facebook" class="text-primary-600 text-xl line-height-1"></iconify-icon>
+                            <div className="mb-20">
+                                <Checkbox
+                                    checked={agree}
+                                    onChange={handleCheckboxChange}
+                                    inputProps={{ 'aria-label': 'Agree to terms and conditions' }}
+                                />
+                                <label className="form-check-label text-sm" htmlFor="condition">
+                                    By creating an account means you agree to the
+                                    <a href="javascript:void(0)" className="text-primary-600 fw-semibold"> Terms & Conditions</a> and our
+                                    <a href="javascript:void(0)" className="text-primary-600 fw-semibold"> Privacy Policy</a>
+                                </label>
+                            </div>
+                            <button type="submit" className="btn btn-primary text-sm btn-sm px-12 py-16 w-100 radius-12 mt-32">
+                                Sign Up
+                            </button>
+                            <div className="mt-32 center-border-horizontal text-center">
+                                <span className="bg-base z-1 px-4">Or sign up with</span>
+                            </div>
+                            <div className="mt-32 d-flex align-items-center gap-3">
+                                <button
+                                    type="button"
+                                    className="fw-semibold text-primary-light py-16 px-24 w-50 border radius-12 text-md d-flex align-items-center justify-content-center gap-12 line-height-1 bg-hover-primary-50"
+                                >
+                                    <iconify-icon icon="ic:baseline-facebook" className="text-primary-600 text-xl line-height-1"></iconify-icon>
+                                    Facebook
+                                </button>
+                                <button
+                                    type="button"
+                                    className="fw-semibold text-primary-light py-16 px-24 w-50 border radius-12 text-md d-flex align-items-center justify-content-center gap-12 line-height-1 bg-hover-primary-50"
+                                >
+                                    <iconify-icon icon="logos:google-icon" className="text-primary-600 text-xl line-height-1"></iconify-icon>
                                     Google
                                 </button>
-                                <button type="button" class="fw-semibold text-primary-light py-16 px-24 w-50 border radius-12 text-md d-flex align-items-center justify-content-center gap-12 line-height-1 bg-hover-primary-50">
-                                    <iconify-icon icon="logos:google-icon" class="text-primary-600 text-xl line-height-1"></iconify-icon>
-                                    Google
-                                </button>
                             </div>
-                            <div class="mt-32 text-center text-sm">
-                                <p class="mb-0">Already have an account? <a href="sign-in.html" class="text-primary-600 fw-semibold">Sign In</a></p>
+                            <div className="mt-32 text-center text-sm">
+                                <p className="mb-0">Already have an account? <a href="sign-in.html" className="text-primary-600 fw-semibold">Sign In</a></p>
                             </div>
-
                         </form>
                     </div>
                 </div>
             </section>
         </div>
-    )
-}
+    );
+};
 
-export default signup
+export default Signup;
