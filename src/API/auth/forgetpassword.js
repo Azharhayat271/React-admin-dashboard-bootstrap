@@ -1,7 +1,7 @@
 // apiUtils.js
 import axios from '../../utils/axios/axiosInstance';
 
-export const ForgetPasswordAPI = async ({ email}) => {
+export const ForgetPasswordAPIs = async ({ email}) => {
     let resolved = {
         error: null,
         data: null,

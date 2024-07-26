@@ -11,8 +11,7 @@ import { LoginAPI } from '../../API/auth/login';
 import { Link, useNavigate } from 'react-router-dom';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
-
-
+import { TextField, IconButton, InputAdornment, Button, Box, Typography, Container } from '@mui/material';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -57,82 +56,92 @@ const Login = () => {
                     </div>
                 </div>
                 <div className="auth-right py-32 px-24 d-flex flex-column justify-content-center">
-                    <div className="max-w-464-px mx-auto w-100">
-                        <div>
-                            <a href="index.html" className="mb-40 max-w-290-px">
-                                <img src={Img2} alt="" />
-                            </a>
-                            <h4 className="mb-12">Sign In to your Account</h4>
-                            <p className="mb-32 text-secondary-light text-lg">Welcome back! please enter your detail</p>
-                        </div>
-                        <form onSubmit={handleSubmit}>
-                            <div className="icon-field mb-16">
-                                <span className="icon top-50 translate-middle-y">
-                                    <EmailIcon />
-                                </span>
-                                <input
+                    <Container maxWidth="sm">
+                        <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <img src={Img2} alt="Logo" style={{ marginBottom: '40px', maxWidth: '290px' }} />
+                            <Typography component="h1" variant="h5">Sign In to your Account</Typography>
+                            <Typography variant="body2" color="textSecondary" align="center">Welcome back! Please enter your details</Typography>
+                            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    color="success"
                                     type="email"
-                                    className="form-control h-56-px bg-neutral-50 radius-12"
-                                    placeholder="Email"
+                                    name="email"
+                                    label="Email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <EmailIcon />
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                    margin="normal"
                                     required
                                 />
-                            </div>
-                            <div className="position-relative mb-20">
-                                <div className="icon-field">
-                                    <span className="icon top-50 translate-middle-y">
-                                        <HttpsIcon />
-                                    </span>
-                                    <input
-                                        type={showPassword ? "text" : "password"}
-                                        className="form-control h-56-px bg-neutral-50 radius-12"
-                                        id="your-password"
-                                        placeholder="Password"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        required
-                                    />
-                                    <span className="toggle-password position-absolute end-0 top-50 translate-middle-y me-16 cursor-pointer" onClick={handlePasswordToggle}>
-                                        {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="d-flex justify-content-between gap-2">
-                                <div className="form-check style-check d-flex align-items-center">
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={rememberMe}
-                                                onChange={() => setRememberMe(!rememberMe)}
-                                                name="remember"
-                                                color="primary"
-                                            />
-                                        }
-                                        label="Remember me"
-                                    />
-                                </div>
-                                <Link to="/forget-password" className="text-primary-600 fw-medium">Forgot Password?</Link>
-                            </div>
-                            <button type="submit" className="btn btn-primary text-sm btn-sm px-12 py-16 w-100 radius-12 mt-32">Sign In</button>
-                            {/* <div className="mt-32 center-border-horizontal text-center">
-                                <span className="bg-base z-1 px-4">Or sign in with</span>
-                            </div>
-                            <div className="mt-32 d-flex align-items-center gap-3">
-                                <button type="button" className="fw-semibold text-primary-light py-16 px-24 w-50 border radius-12 text-md d-flex align-items-center justify-content-center gap-12 line-height-1 bg-hover-primary-50">
-                                    <iconify-icon icon="ic:baseline-facebook" className="text-primary-600 text-xl line-height-1"></iconify-icon>
-                                    Google
-                                </button>
-                                <button type="button" className="fw-semibold text-primary-light py-16 px-24 w-50 border radius-12 text-md d-flex align-items-center justify-content-center gap-12 line-height-1 bg-hover-primary-50">
-                                    <iconify-icon icon="logos:google-icon" className="text-primary-600 text-xl line-height-1"></iconify-icon>
-                                    Google
-                                </button>
-                            </div> */}
-                            <div className="mt-32 text-center text-sm">
-                                <p className="mb-0">Don’t have an account? <Link to="/register" className="text-primary-600 fw-semibold">Sign Up</Link></p>
-                            </div>
-                        </form>
-                    </div>
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    color="success"
+
+                                    type={showPassword ? "text" : "password"}
+                                    name="password"
+                                    label="Password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <HttpsIcon />
+                                            </InputAdornment>
+                                        ),
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton onClick={handlePasswordToggle}>
+                                                    {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                    margin="normal"
+                                    required
+                                />
+       <div style={{ display: 'flex', alignItems: 'center' }}>
+    <FormControlLabel
+        style={{ marginRight: '10px' }}
+        control={
+            <Checkbox
+                checked={rememberMe}
+
+                onChange={() => setRememberMe(!rememberMe)}
+                name="remember"
+                color="primary"
+            />
+        }
+        label="Remember me"
+        sx={{ mt: 2 }}
+    />
+    <Box sx={{marginLeft: '30%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
+        <Link to="/forget-password" className="text-primary-600 fw-medium">Forgot Password?</Link>
+    </Box>
+</div>
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="outlined"
+                                    color="success"
+                                    sx={{ mt: 3, mb: 2 }}
+                                >
+                                    Sign In
+                                </Button>
+                                <Typography variant="body2" color="textSecondary" align="center" sx={{ mt: 2 }}>
+                                    Don’t have an account? <Link to="/register" className="text-primary-600 fw-semibold">Sign Up</Link>
+                                </Typography>
+                            </Box>
+                        </Box>
+                    </Container>
                 </div>
             </section>
             <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleSnackbarClose}>

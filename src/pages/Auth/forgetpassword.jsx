@@ -4,7 +4,7 @@ import Img2 from "./../../assets/images/auth/logo.png";
 import EmailIcon from '@mui/icons-material/Email';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import { ForgetPasswordAPI } from '../../API/auth/forgetpassword';
+import  {ForgetPasswordAPIs}  from '../../API/auth/forgetpassword';
 import { Link, useNavigate } from 'react-router-dom';
 
 const ForgetPassword = () => {
@@ -16,7 +16,7 @@ const ForgetPassword = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await ForgetPasswordAPI({ email });
+        const response = await ForgetPasswordAPIs({ email });
         if (response.data==null) {
 
             setError(response.error);
@@ -26,6 +26,9 @@ const ForgetPassword = () => {
             setSuccessMessage("Password reset link has been sent to your email.");
             setOpenSnackbar(true);
             setEmail('');
+            setTimeout(() => {
+                navigate('/login');
+            }, 5000);
         }
     };
 

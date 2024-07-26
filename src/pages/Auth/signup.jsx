@@ -95,6 +95,8 @@ const Signup = () => {
                                     variant="outlined"
                                     fullWidth
                                     name="name"
+                                    color="success"
+
                                     label="Name"
                                     value={formik.values.name}
                                     onChange={formik.handleChange}
@@ -111,6 +113,8 @@ const Signup = () => {
                                 <TextField
                                     variant="outlined"
                                     fullWidth
+                                    color="success"
+
                                     name="username"
                                     label="Username"
                                     value={formik.values.username}
@@ -126,9 +130,11 @@ const Signup = () => {
                                     margin="normal"
                                 />
                                 <FormControl fullWidth variant="outlined" margin="normal" error={formik.touched.gender && Boolean(formik.errors.gender)}>
-                                    <InputLabel>Select Gender</InputLabel>
+                                    <InputLabel color="success">Select Gender</InputLabel>
                                     <Select
                                         name="gender"
+                                        color="success"
+
                                         value={formik.values.gender}
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
@@ -143,6 +149,8 @@ const Signup = () => {
                                 </FormControl>
                                 <TextField
                                     variant="outlined"
+                                    color="success"
+
                                     fullWidth
                                     type="email"
                                     name="email"
@@ -161,6 +169,8 @@ const Signup = () => {
                                 />
                                 <TextField
                                     variant="outlined"
+                                    color="success"
+
                                     fullWidth
                                     type="password"
                                     name="password"
@@ -180,6 +190,7 @@ const Signup = () => {
                                 <TextField
                                     variant="outlined"
                                     fullWidth
+                                    color="success"
                                     type="password"
                                     name="confirmPassword"
                                     label="Confirm Password"
@@ -198,6 +209,8 @@ const Signup = () => {
                                 <TextField
                                     variant="outlined"
                                     fullWidth
+                                    color="success"
+
                                     name="phoneNo"
                                     label="Phone Number"
                                     value={formik.values.phoneNo}
@@ -213,7 +226,7 @@ const Signup = () => {
                                     margin="normal"
                                 />
                                 <FormControlLabel
-                                    control={<Checkbox checked={agree} onChange={handleCheckboxChange} color="primary" />}
+                                    control={<Checkbox  checked={agree} onChange={handleCheckboxChange} color="success" />}
                                     label="I agree to the terms and conditions"
                                     sx={{ mt: 2 }}
                                 />
@@ -226,7 +239,7 @@ const Signup = () => {
                                 >
                                     Register
                                 </Button>
-                                
+
                                 <Typography variant="body2" color="textSecondary" align="center">
                                     <Link to="/login">Already have an account? Login</Link>
                                 </Typography>

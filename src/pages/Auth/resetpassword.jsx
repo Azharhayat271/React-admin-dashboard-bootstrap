@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import Img1 from './../../assets/images/auth/auth/auth-img.png';
-import Img2 from './../../assets/images/auth/logo.png';
-import EmailIcon from '@mui/icons-material/Email';
-import HttpsIcon from '@mui/icons-material/Https';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import { TextField, Button, Checkbox, FormControlLabel } from '@mui/material';
+import { TextField, Button } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import Img1 from './../../assets/images/auth/auth/auth-img.png';
+import Img2 from './../../assets/images/auth/logo.png';
 import { ResetPasswordAPI } from "./../../API/auth/resetpassword";
 
 const ResetPassword = () => {
-    const { token } = useParams(); // Get the token from the URL
+    const { token } = useParams();
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -30,18 +27,28 @@ const ResetPassword = () => {
             setOpenSnackbar(true);
             return;
         }
-        const response = ResetPasswordAPI({token, newPassword})
-        if (response.status === 200) {
-            setSuccessMessage(response.data.message);
-            setOpenSnackbar(true);
-            setTimeout(() => {
-                navigate('/login');
-            }, 5000);
-        } else {
-            setError(response.data.message);
+
+        try {
+            const response = await ResetPasswordAPI({ token, newPassword });
+
+            if (response.error === null) {
+                setSuccessMessage(response.data.message);
+                console.log(error);
+                setOpenSnackbar(true);
+                setTimeout(() => {
+                    navigate('/login');
+                }, 5000);
+            } else {
+                setError(response.data.message);
+                setOpenSnackbar(true);
+                setTimeout(() => {
+                    navigate('/login');
+                }, 5000);
+            }
+        } catch (err) {
+            setError("An error occurred. Please try again.");
             setOpenSnackbar(true);
         }
-
     };
 
     const handlePasswordToggle = () => {
@@ -50,6 +57,8 @@ const ResetPassword = () => {
 
     const handleSnackbarClose = () => {
         setOpenSnackbar(false);
+        setError(null);
+        setSuccessMessage(null);
     };
 
     return (
@@ -71,9 +80,6 @@ const ResetPassword = () => {
                         </div>
                         <form onSubmit={handleSubmit}>
                             <div className="icon-field mb-16">
-                                {/* <span className="icon top-50 translate-middle-y">
-                                    <HttpsIcon />
-                                </span> */}
                                 <TextField
                                     fullWidth
                                     label="New Password"
@@ -84,7 +90,10 @@ const ResetPassword = () => {
                                     required
                                     InputProps={{
                                         endAdornment: (
-                                            <span className="toggle-password position-absolute end-0 top-50 translate-middle-y me-16 cursor-pointer" onClick={handlePasswordToggle}>
+                                            <span
+                                                className="toggle-password position-absolute end-0 top-50 translate-middle-y me-16 cursor-pointer"
+                                                onClick={handlePasswordToggle}
+                                            >
                                                 {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                                             </span>
                                         )
@@ -92,9 +101,6 @@ const ResetPassword = () => {
                                 />
                             </div>
                             <div className="icon-field mb-16">
-                                {/* <span className="icon top-50 translate-middle-y">
-                                    <HttpsIcon />
-                                </span> */}
                                 <TextField
                                     fullWidth
                                     label="Confirm Password"
@@ -105,15 +111,16 @@ const ResetPassword = () => {
                                     required
                                     InputProps={{
                                         endAdornment: (
-                                            <span className="toggle-password position-absolute end-0 top-50 translate-middle-y me-16 cursor-pointer" onClick={handlePasswordToggle}>
+                                            <span
+                                                className="toggle-password position-absolute end-0 top-50 translate-middle-y me-16 cursor-pointer"
+                                                onClick={handlePasswordToggle}
+                                            >
                                                 {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                                             </span>
                                         )
                                     }}
                                 />
                             </div>
-                            {error && <Alert severity="error">{error}</Alert>}
-                            {successMessage && <Alert severity="success">{successMessage}</Alert>}
                             <Button
                                 type="submit"
                                 variant="contained"
@@ -124,7 +131,6 @@ const ResetPassword = () => {
                                 Reset Password
                             </Button>
                         </form>
-                        {/* back to login  */}
                         <div className="mt-32 text-center text-sm">
                             <p className="mb-0">Remember your password? <a href="/login" className="text-primary-600 fw-semibold">Sign In</a></p>
                         </div>
