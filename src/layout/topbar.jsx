@@ -12,7 +12,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import MessageIcon from '@mui/icons-material/Message';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Topbar = ({ toggleActive, toggleMobileActive }) => {
     const name = localStorage.getItem('name');
@@ -22,7 +22,7 @@ const Topbar = ({ toggleActive, toggleMobileActive }) => {
 
 // handle logout
 const handleLogout = () => {
-    localStorage.removeItem('token'); // Adjust the key name if needed
+    localStorage.removeItem('token');
     navigate('/');
  
 };
@@ -153,9 +153,9 @@ const handleLogout = () => {
                                     </div>
                                     <ul className="to-top-list">
                                         <li>
-                                            <a className="dropdown-item text-black px-0 py-8 hover-bg-transparent hover-text-primary d-flex align-items-center gap-3"
-                                                href="view-profile.html">
-                                                <PersonIcon className="icon text-xl" /> My Profile</a>
+                                            <Link className="dropdown-item text-black px-0 py-8 hover-bg-transparent hover-text-primary d-flex align-items-center gap-3"
+                                                to="/profile">
+                                                <PersonIcon className="icon text-xl" /> My Profile</Link>
                                         </li>
                                         <li>
                                             <a className="dropdown-item text-black px-0 py-8 hover-bg-transparent hover-text-primary d-flex align-items-center gap-3"

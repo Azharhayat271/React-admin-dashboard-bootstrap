@@ -17,6 +17,7 @@ import Layout from './layout/layout';
 import Forgetpassword from "./pages/Auth/forgetpassword"
 import ResetPassword from "./pages/Auth/resetpassword"
 import LocalStorageWatcher from './utils/tokenValidator/authwatcher';
+import Profile from "./pages/profile/main"
 
 
 
@@ -35,6 +36,7 @@ function App() {
 
 
           <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<Layout><Profile /></Layout>} />
           <Route path="/formLayout" element={<Layout><FormLayout /></Layout>} />
           <Route path="/formValidations" element={<Layout><FormformLayoutalidation /></Layout>} />
           <Route path="/table" element={<Layout><Table /></Layout>} />
