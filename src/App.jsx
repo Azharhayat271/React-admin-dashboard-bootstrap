@@ -14,6 +14,8 @@ import Grid from "./components/dataviews/grid";
 import Calender from './components/calender/calender';
 import ViewProfile from './components/profile/view';
 import Layout from './layout/layout';
+import Forgetpassword from "./pages/Auth/forgetpassword"
+import ResetPassword from "./pages/Auth/resetpassword"
 import LocalStorageWatcher from './utils/tokenValidator/authwatcher';
 
 
@@ -28,6 +30,10 @@ function App() {
           <Route path="/" element={<Loader />} />
           <Route path="/newDashboardDesign" element={<Layout><DashboardDesign /></Layout>} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forget-password" element={<Forgetpassword />} />
+          <Route path="//reset-password/:token" element={<ResetPassword />} />
+
+
           <Route path="/register" element={<Register />} />
           <Route path="/formLayout" element={<Layout><FormLayout /></Layout>} />
           <Route path="/formValidations" element={<Layout><FormformLayoutalidation /></Layout>} />

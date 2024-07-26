@@ -6,51 +6,70 @@ import HttpsIcon from '@mui/icons-material/Https';
 import PersonIcon from '@mui/icons-material/Person';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import { useFormik } from 'formik';
+import { SignupSchema } from '../../utils/fieldvalidator/yupvalidation';
 import { LoginAPI } from '../../API/auth/register';
-import { toast } from 'react-toastify';
+import { useNavigate, Link } from 'react-router-dom';
+import { TextField, Select, MenuItem, InputLabel, FormControl, Button, Box, Container, Typography } from '@mui/material';
 
 const Signup = () => {
-    const [formData, setFormData] = useState({
-        name: '',
-        username: '',
-        gender: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        phoneNo: '',
-    });
-
     const [agree, setAgree] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [severity, setSeverity] = useState('success');
+    const [message, setMessage] = useState('');
+    const navigate = useNavigate();
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+    const formik = useFormik({
+        initialValues: {
+            name: '',
+            username: '',
+            gender: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
+            phoneNo: '',
+        },
+        validationSchema: SignupSchema,
+        onSubmit: async (values) => {
+            if (!agree) {
+                setMessage('You must agree to the terms and conditions');
+                setSeverity('error');
+                setOpen(true);
+                return;
+            }
+
+            try {
+                const { name, username, gender, email, password, phoneNo } = values;
+                const result = await LoginAPI({ name, username, gender, email, password, phoneNo });
+
+                if (result.error) {
+                    setMessage(result.error || 'An error occurred');
+                    setSeverity('error');
+                } else {
+                    setMessage('Registration successful!');
+                    setSeverity('success');
+                    setTimeout(() => {
+                        navigate('/login');
+                    }, 3000);
+                }
+            } catch (error) {
+                console.error('API Error:', error);
+                setMessage('An unexpected error occurred');
+                setSeverity('error');
+            } finally {
+                setOpen(true);
+            }
+        },
+    });
 
     const handleCheckboxChange = (e) => {
         setAgree(e.target.checked);
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (formData.password !== formData.confirmPassword) {
-            toast.error('Passwords do not match');
-            return;
-        }
-
-        if (!agree) {
-            toast.error('You must agree to the terms and conditions');
-            return;
-        }
-
-        const { name, username, gender, email, password, phoneNo } = formData;
-        const result = await LoginAPI({ name, username, gender, email, password, phoneNo });
-
-        if (result.error) {
-            toast.error(result.error);
-        } else {
-            toast.success('Registration successful!');
-        }
+    const handleClose = () => {
+        setOpen(false);
     };
 
     return (
@@ -62,153 +81,170 @@ const Signup = () => {
                     </div>
                 </div>
                 <div className="auth-right py-32 px-24 d-flex flex-column justify-content-center">
-                    <div className="max-w-464-px mx-auto w-100">
-                        <div>
-                            <a href="index.html" className="mb-40 max-w-290-px">
-                                <img src={Img2} alt="" />
-                            </a>
-                            <h4 className="mb-12">Sign Up to your Account</h4>
-                            <p className="mb-32 text-secondary-light text-lg">Welcome back! please enter your detail</p>
-                        </div>
-                        <form onSubmit={handleSubmit}>
-                            <div className="icon-field mb-16">
-                                <span className="icon top-50 translate-middle-y">
-                                    <PersonIcon />
-                                </span>
-                                <input
-                                    type="text"
-                                    className="form-control h-56-px bg-neutral-50 radius-12"
-                                    placeholder="Name"
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                            <div className="icon-field mb-16">
-                                <span className="icon top-50 translate-middle-y">
-                                    <PersonIcon />
-                                </span>
-                                <input
-                                    type="text"
-                                    className="form-control h-56-px bg-neutral-50 radius-12"
-                                    placeholder="Username"
-                                    name="username"
-                                    value={formData.username}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                            <div className="icon-field mb-16">
-                                <span className="icon top-50 translate-middle-y">
-                                    <PersonIcon />
-                                </span>
-                                <input
-                                    type="text"
-                                    className="form-control h-56-px bg-neutral-50 radius-12"
-                                    placeholder="Gender"
-                                    name="gender"
-                                    value={formData.gender}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                            <div className="icon-field mb-16">
-                                <span className="icon top-50 translate-middle-y">
-                                    <EmailIcon />
-                                </span>
-                                <input
-                                    type="email"
-                                    className="form-control h-56-px bg-neutral-50 radius-12"
-                                    placeholder="Email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                            <div className="icon-field mb-16">
-                                <span className="icon top-50 translate-middle-y">
-                                    <HttpsIcon />
-                                </span>
-                                <input
-                                    type="password"
-                                    className="form-control h-56-px bg-neutral-50 radius-12"
-                                    placeholder="Password"
-                                    name="password"
-                                    value={formData.password}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                            <div className="icon-field mb-16">
-                                <span className="icon top-50 translate-middle-y">
-                                    <HttpsIcon />
-                                </span>
-                                <input
-                                    type="password"
-                                    className="form-control h-56-px bg-neutral-50 radius-12"
-                                    placeholder="Confirm Password"
-                                    name="confirmPassword"
-                                    value={formData.confirmPassword}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                            <div className="icon-field mb-16">
-                                <span className="icon top-50 translate-middle-y">
-                                    <PersonIcon />
-                                </span>
-                                <input
-                                    type="text"
-                                    className="form-control h-56-px bg-neutral-50 radius-12"
-                                    placeholder="Phone Number"
-                                    name="phoneNo"
-                                    value={formData.phoneNo}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                            <div className="mb-20 d-flex align-items-center">
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            checked={agree}
-                                            onChange={handleCheckboxChange}
-                                            inputProps={{ 'aria-label': 'Agree to terms and conditions' }}
-                                        />
-                                    }
-                                    label={
-                                        <span className="text-sm">
-                                            By creating an account means you agree to the
-                                            <a href="javascript:void(0)" className="text-primary-600 fw-semibold"> Terms & Conditions</a> and our
-                                            <a href="javascript:void(0)" className="text-primary-600 fw-semibold"> Privacy Policy</a>
-                                        </span>
-                                    }
-                                />
-                            </div>
-                            <button type="submit" className="btn btn-primary text-sm btn-sm px-12 py-16 w-100 radius-12 mt-32">
+                    <div>
+                        <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '400px', width: '100%', mx: 'auto' }}>
+                            <img src={Img2} alt="Logo" style={{ marginBottom: '40px', maxWidth: '290px' }} />
+                            <Typography component="h1" variant="h5">
                                 Sign Up
-                            </button>
-                            <div className="mt-32 center-border-horizontal text-center">
-                                <span className="bg-base z-1 px-4">Or sign up with</span>
-                            </div>
-                            <div className="mt-32 d-flex align-items-center gap-3">
-                                <button
-                                    type="button"
-                                    className="fw-semibold text-primary-light py-16 px-24 w-50 border radius-12 text-md d-flex align-items-center justify-content-center gap-12 line-height-1 bg-hover-primary-50"
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary" align="center">
+                                Welcome back! please enter your details
+                            </Typography>
+                            <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 3 }}>
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    name="name"
+                                    label="Name"
+                                    value={formik.values.name}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.touched.name && Boolean(formik.errors.name)}
+                                    helperText={formik.touched.name && formik.errors.name}
+                                    InputProps={{
+                                        startAdornment: (
+                                            <PersonIcon />
+                                        ),
+                                    }}
+                                    margin="normal"
+                                />
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    name="username"
+                                    label="Username"
+                                    value={formik.values.username}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.touched.username && Boolean(formik.errors.username)}
+                                    helperText={formik.touched.username && formik.errors.username}
+                                    InputProps={{
+                                        startAdornment: (
+                                            <PersonIcon />
+                                        ),
+                                    }}
+                                    margin="normal"
+                                />
+                                <FormControl fullWidth variant="outlined" margin="normal" error={formik.touched.gender && Boolean(formik.errors.gender)}>
+                                    <InputLabel>Select Gender</InputLabel>
+                                    <Select
+                                        name="gender"
+                                        value={formik.values.gender}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        label="Select Gender"
+
+                                    >
+                                        <MenuItem value=""><em>Select Gender</em></MenuItem>
+                                        <MenuItem value="Male">Male</MenuItem>
+                                        <MenuItem value="Female">Female</MenuItem>
+                                    </Select>
+                                    {formik.touched.gender && formik.errors.gender && <Typography color="error">{formik.errors.gender}</Typography>}
+                                </FormControl>
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    type="email"
+                                    name="email"
+                                    label="Email"
+                                    value={formik.values.email}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.touched.email && Boolean(formik.errors.email)}
+                                    helperText={formik.touched.email && formik.errors.email}
+                                    InputProps={{
+                                        startAdornment: (
+                                            <EmailIcon />
+                                        ),
+                                    }}
+                                    margin="normal"
+                                />
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    type="password"
+                                    name="password"
+                                    label="Password"
+                                    value={formik.values.password}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.touched.password && Boolean(formik.errors.password)}
+                                    helperText={formik.touched.password && formik.errors.password}
+                                    InputProps={{
+                                        startAdornment: (
+                                            <HttpsIcon />
+                                        ),
+                                    }}
+                                    margin="normal"
+                                />
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    type="password"
+                                    name="confirmPassword"
+                                    label="Confirm Password"
+                                    value={formik.values.confirmPassword}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
+                                    helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
+                                    InputProps={{
+                                        startAdornment: (
+                                            <HttpsIcon />
+                                        ),
+                                    }}
+                                    margin="normal"
+                                />
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    name="phoneNo"
+                                    label="Phone Number"
+                                    value={formik.values.phoneNo}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.touched.phoneNo && Boolean(formik.errors.phoneNo)}
+                                    helperText={formik.touched.phoneNo && formik.errors.phoneNo}
+                                    InputProps={{
+                                        startAdornment: (
+                                            <PersonIcon />
+                                        ),
+                                    }}
+                                    margin="normal"
+                                />
+                                <FormControlLabel
+                                    control={<Checkbox checked={agree} onChange={handleCheckboxChange} color="primary" />}
+                                    label="I agree to the terms and conditions"
+                                    sx={{ mt: 2 }}
+                                />
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="outlined"
+                                    color="error"
+                                    sx={{ mt: 2, mb: 2 }}
                                 >
-                                    <iconify-icon icon="ic:baseline-facebook" className="text-primary-600 text-xl line-height-1"></iconify-icon>
-                                    Facebook
-                                </button>
-                                <button
-                                    type="button"
-                                    className="fw-semibold text-primary-light py-16 px-24 w-50 border radius-12 text-md d-flex align-items-center justify-content-center gap-12 line-height-1 bg-hover-primary-50"
-                                >
-                                    <iconify-icon icon="logos:google-icon" className="text-primary-600 text-xl line-height-1"></iconify-icon>
-                                    Google
-                                </button>
-                            </div>
-                            <div className="mt-32 text-center text-sm">
-                                <p className="mb-0">Already have an account? <a href="sign-in.html" className="text-primary-600 fw-semibold">Sign In</a></p>
-                            </div>
-                        </form>
+                                    Register
+                                </Button>
+                                
+                                <Typography variant="body2" color="textSecondary" align="center">
+                                    <Link to="/login">Already have an account? Login</Link>
+                                </Typography>
+                            </Box>
+                        </Box>
+                        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                            <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
+                                {message}
+                            </Alert>
+                        </Snackbar>
                     </div>
                 </div>
             </section>
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
+                    {message}
+                </Alert>
+            </Snackbar>
         </div>
     );
 };

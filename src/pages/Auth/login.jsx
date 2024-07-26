@@ -34,9 +34,6 @@ const Login = () => {
             localStorage.setItem('name', response.data.user.name);
             localStorage.setItem('role', response.data.user.role);
             localStorage.setItem('image', response.data.user.image);
-
-
-
             localStorage.setItem('rememberMe', rememberMe);
 
             navigate('/newDashboardDesign');
@@ -115,7 +112,7 @@ const Login = () => {
                                         label="Remember me"
                                     />
                                 </div>
-                                <a className="text-primary-600 fw-medium">Forgot Password?</a>
+                                <Link to="/forget-password" className="text-primary-600 fw-medium">Forgot Password?</Link>
                             </div>
                             <button type="submit" className="btn btn-primary text-sm btn-sm px-12 py-16 w-100 radius-12 mt-32">Sign In</button>
                             {/* <div className="mt-32 center-border-horizontal text-center">
