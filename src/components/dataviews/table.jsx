@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { getAllUsersAPI } from './../../API/users/getAllusers';
+import {deleteUserAPI} from "./../../API/users/deleteUser";
 import {
-    Visibility, Edit, Delete, Add as AddIcon, Clear as ClearIcon, Print as PrintIcon,
-    FileCopy as ExportIcon, FilterList as FilterIcon
+    Visibility, Edit, Delete, Clear as ClearIcon, Print as PrintIcon,
+    FilterList as FilterIcon
 } from '@mui/icons-material';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { CSVLink } from 'react-csv';
 import GetAppIcon from '@mui/icons-material/GetApp';
-import { Skeleton } from '@mui/material';
+import { Skeleton, Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
+import { motion } from 'framer-motion';
+
+// Define dialog animation variants
+const dialogVariants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { opacity: 1, scale: 1 },
+    exit: { opacity: 0, scale: 0.9 },
+};
 
 const Table = () => {
     const [users, setUsers] = useState([]);
@@ -18,6 +27,8 @@ const Table = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('All');
     const [anchorEl, setAnchorEl] = useState(null);
+    const [userToDelete, setUserToDelete] = useState(null);
+    const [openDialog, setOpenDialog] = useState(false);
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -86,6 +97,29 @@ const Table = () => {
         createdAt: new Date(user.createdAt).toLocaleDateString(),
     }));
 
+    const handleDeleteClick = (userId) => {
+        setUserToDelete(userId);
+        setOpenDialog(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (userToDelete) {
+            const { error } = await deleteUserAPI(userToDelete);
+            if (error) {
+                setError(error);
+            } else {
+                setUsers(users.filter(user => user._id !== userToDelete));
+            }
+            setOpenDialog(false);
+            setUserToDelete(null);
+        }
+    };
+
+    const handleCancelDelete = () => {
+        setOpenDialog(false);
+        setUserToDelete(null);
+    };
+
     return (
         <div>
             <div className="dashboard-main-body">
@@ -135,7 +169,7 @@ const Table = () => {
                         </IconButton>
                         <Menu
                             anchorEl={anchorEl}
-                            open={open}
+                            open={Boolean(anchorEl)}
                             onClose={handleFilterMenuClose}
                             PaperProps={{
                                 style: {
@@ -193,7 +227,10 @@ const Table = () => {
                                                     <IconButton className="bg-success-focus text-success-600 bg-hover-success-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle">
                                                         <Edit className="icon text-xl" />
                                                     </IconButton>
-                                                    <IconButton className="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle">
+                                                    <IconButton 
+                                                        className="remove-item-btn bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                                                        onClick={() => handleDeleteClick(user._id)}
+                                                    >
                                                         <Delete className="icon text-xl" />
                                                     </IconButton>
                                                 </div>
@@ -210,6 +247,36 @@ const Table = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Confirmation Dialog */}
+            <Dialog
+                open={openDialog}
+                onClose={() => setOpenDialog(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    Confirm Delete
+                </DialogTitle>
+                <DialogContent>
+                    <motion.div
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        variants={dialogVariants}
+                    >
+                        <p>Are you sure you want to delete this user?</p>
+                    </motion.div>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCancelDelete} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleConfirmDelete} color="secondary">
+                        Delete
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };
