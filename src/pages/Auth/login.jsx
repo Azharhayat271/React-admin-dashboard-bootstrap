@@ -9,15 +9,12 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { LoginAPI } from '../../API/auth/login';
 import { Link, useNavigate } from 'react-router-dom';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import { TextField, IconButton, InputAdornment, Button, Box, Typography, Container } from '@mui/material';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState(null);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const navigate = useNavigate();
@@ -33,7 +30,6 @@ const Login = () => {
             localStorage.setItem('name', response.data.user.name);
             localStorage.setItem('role', response.data.user.role);
             localStorage.setItem('image', response.data.user.image);
-            localStorage.setItem('rememberMe', rememberMe);
 
             navigate('/newDashboardDesign');
         }
@@ -59,7 +55,7 @@ const Login = () => {
                     <Container maxWidth="sm">
                         <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <img src={Img2} alt="Logo" style={{ marginBottom: '40px', maxWidth: '290px' }} />
-                            <Typography component="h1" variant="h5">Sign In to your Account</Typography>
+                            <Typography component="h1" variant="h5">Sign In</Typography>
                             <Typography variant="body2" color="textSecondary" align="center">Welcome back! Please enter your details</Typography>
                             <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
                                 <TextField
@@ -85,7 +81,6 @@ const Login = () => {
                                     variant="outlined"
                                     fullWidth
                                     color="success"
-
                                     type={showPassword ? "text" : "password"}
                                     name="password"
                                     label="Password"
@@ -108,29 +103,10 @@ const Login = () => {
                                     margin="normal"
                                     required
                                 />
-       <div style={{ display: 'flex', alignItems: 'center' }}>
-    <FormControlLabel
-        style={{ marginRight: '10px' }}
-        control={
-            <Checkbox
-                checked={rememberMe}
-
-                onChange={() => setRememberMe(!rememberMe)}
-                name="remember"
-                color="primary"
-            />
-        }
-        label="Remember me"
-        sx={{ mt: 2 }}
-    />
-    <Box sx={{marginLeft: '30%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
-        <Link to="/forget-password" className="text-primary-600 fw-medium">Forgot Password?</Link>
-    </Box>
-</div>
                                 <Button
                                     type="submit"
                                     fullWidth
-                                    variant="outlined"
+                                    variant="contained"
                                     color="success"
                                     sx={{ mt: 3, mb: 2 }}
                                 >
@@ -139,6 +115,9 @@ const Login = () => {
                                 <Typography variant="body2" color="textSecondary" align="center" sx={{ mt: 2 }}>
                                     Don’t have an account? <Link to="/register" className="text-primary-600 fw-semibold">Sign Up</Link>
                                 </Typography>
+                                <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+                                    <Link to="/forget-password" className="text-primary-600 fw-medium">Forgot Password?</Link>
+                                </Box>
                             </Box>
                         </Box>
                     </Container>

@@ -233,7 +233,7 @@ const Signup = () => {
                                 <Button
                                     type="submit"
                                     fullWidth
-                                    variant="outlined"
+                                    variant="contained"
                                     color="error"
                                     sx={{ mt: 2, mb: 2 }}
                                 >
